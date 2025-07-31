@@ -1,0 +1,114 @@
+
+<script>
+
+ function getbetweenDaysArray(sd, ed,isSats) {
+    
+		var start = sd.getFullYear()+"-"+(sd.getMonth()+1)+"-"+sd.getDate();
+
+		var end = ed.getFullYear()+"-"+(ed.getMonth()+1)+"-"+ed.getDate();
+
+        end = new Date(end);  
+
+		for (var arr = [], dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
+
+             let yr = dt.getFullYear();
+             
+             let day = String(dt.getDate()).padStart(2, '0');
+             
+             let mon = String(dt.getMonth() + 1).padStart(2, '0');
+             
+             let ymd= yr+"-"+mon+"-"+day;
+              
+        if(isSats){
+			
+               if(  String(new Date(ymd)).indexOf("Sat")>=0)arr.push(ymd);
+               
+               continue;
+            }
+            
+          arr.push({"all":String(new Date(dt)),"dat":ymd});
+		}
+	
+		return( arr);
+	};
+
+
+async function getnonWorkingDays(sd,ed,isSats){
+
+var betweendates = await getbetweenDaysArray(sd,ed,isSats);
+
+
+let fromYear= sd.getFullYear();let toYear= ed.getFullYear();
+
+
+for(let q =fromYear; q<=  toYear; q++){
+
+var getAllSaturdays= await getbetweenDaysArray(new Date(fromYear+"-01-01"),ed,1);
+
+}
+
+
+console.log("betweendates",betweendates);
+
+console.log("getAllSaturdays",getAllSaturdays);
+
+var nonWorkingDays = 0;
+
+for(let q of betweendates){
+
+  if(q["all"].indexOf("Sun")>=0 ||
+    (q["all"].indexOf("Sat")>=0 && getAllSaturdays.indexOf(q["dat"])%2==0))nonWorkingDays++;
+
+
+}
+alert(nonWorkingDays)
+}
+getnonWorkingDays(new Date("2025-01-13"), new Date("2025-02-18"),0);
+
+/*
+
+function countSaturdaysTillToday() {
+  // Get the current date
+  const today = new Date("2024-12-31");
+  
+
+  const startOfYear = new Date(2024, 0, 1);
+  
+  // Count Saturdays
+  let saturdayCount = 0;
+  
+  // Loop through each day from the start of the year to today
+  for (let date = new Date(startOfYear); date <= today; date.setDate(date.getDate() + 1)) {
+
+  
+    // Check if the current day is Saturday (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+    if (date.getDay() === 6) {
+      saturdayCount++;
+    }
+  }
+  
+  return saturdayCount;
+}
+
+alert(countSaturdaysTillToday());
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
